@@ -36,7 +36,7 @@ end
 
 # Cookbook Settings
 default["percona"]["main_config_file"]                          = "/etc/my.cnf"
-default["percona"]["keyserver"]                                 = "keys.gnupg.net"
+default["percona"]["keyserver"]                                 = "keyserver.ubuntu.com"
 default["percona"]["encrypted_data_bag"]                        = "passwords"
 
 # Basic Settings
@@ -44,9 +44,9 @@ default["percona"]["server"]["role"]                            = "standalone"
 default["percona"]["server"]["username"]                        = "mysql"
 default["percona"]["server"]["datadir"]                         = "/var/lib/mysql"
 default["percona"]["server"]["tmpdir"]                          = "/tmp"
-set_unless["percona"]["server"]["root_password"]                = secure_password
+default["percona"]["server"]["root_password"]                   = secure_password
 default["percona"]["server"]["debian_username"]                 = "debian-sys-maint"
-set_unless["percona"]["server"]["debian_password"]              = secure_password
+default["percona"]["server"]["debian_password"]                 = secure_password
 default["percona"]["server"]["nice"]                            = 0
 default["percona"]["server"]["open_files_limit"]                = 16384
 default["percona"]["server"]["hostname"]                        = "localhost"
@@ -104,7 +104,7 @@ default["percona"]["server"]["myisam_repair_threads"]           = 1
 # InnoDB Specific
 default["percona"]["server"]["skip_innodb"]                     = false
 default["percona"]["server"]["innodb_additional_mem_pool_size"] = "32M"
-default["percona"]["server"]["innodb_buffer_pool_size"]         = "128M"
+default["percona"]["server"]["innodb_buffer_pool_size"]         = "2G"
 default["percona"]["server"]["innodb_data_file_path"]           = "ibdata1:10M:autoextend"
 default["percona"]["server"]["innodb_file_per_table"]           = true
 default["percona"]["server"]["innodb_data_home_dir"]            = ""
@@ -140,3 +140,4 @@ default["percona"]["cluster"]["wsrep_sst_method"]               = "rsync"
 default["percona"]["cluster"]["wsrep_node_name"]                = ""
 default["percona"]["cluster"]["innodb_locks_unsafe_for_binlog"] = 1
 default["percona"]["cluster"]["innodb_autoinc_lock_mode"]       = 2
+
