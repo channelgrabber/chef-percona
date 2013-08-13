@@ -349,6 +349,7 @@ skip-innodb
 innodb_additional_mem_pool_size = <%= node["percona"]["server"]["innodb_additional_mem_pool_size"] %>
 
 # This config file assumes a main memory of at least 8G
+innodb_buffer_pool_instances = <%= node["percona"]["server"]["innodb_buffer_pool_instances"] %>
 innodb_buffer_pool_size = <%= node["percona"]["server"]["innodb_buffer_pool_size"] %>
 
 # InnoDB stores data in one or more data files forming the tablespace.

@@ -115,6 +115,7 @@ default["percona"]["server"]["myisam_repair_threads"]           = 1
 # InnoDB Specific
 default["percona"]["server"]["skip_innodb"]                     = false
 default["percona"]["server"]["innodb_additional_mem_pool_size"] = "32M"
+default["percona"]["server"]["innodb_buffer_pool_instances"]    = 1
 default["percona"]["server"]["innodb_buffer_pool_size"]         = "2G"
 default["percona"]["server"]["innodb_data_file_path"]           = "ibdata1:10M:autoextend"
 default["percona"]["server"]["innodb_file_per_table"]           = true
