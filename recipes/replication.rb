@@ -17,5 +17,8 @@ end
 execute "mysql-set-replication" do
   command "/usr/bin/mysql < /etc/mysql/replication.sql"
   action :nothing
+  user "root"
+  group "root"
+  environment ({"HOME" => "/root"})
   subscribes :run, resources("template[/etc/mysql/replication.sql]"), :immediately
 end
