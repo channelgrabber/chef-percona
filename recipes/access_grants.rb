@@ -18,5 +18,7 @@ end
 execute "mysql-install-privileges" do
   command "/usr/bin/mysql < /etc/mysql/grants.sql"
   action :nothing
+  user "root"
+  group "root"
   subscribes :run, resources("template[/etc/mysql/grants.sql]"), :immediately
 end
