@@ -20,5 +20,6 @@ execute "mysql-install-privileges" do
   action :nothing
   user "root"
   group "root"
+  environment ({"HOME" => "/root"})
   subscribes :run, resources("template[/etc/mysql/grants.sql]"), :immediately
 end
