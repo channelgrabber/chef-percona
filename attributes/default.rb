@@ -39,7 +39,7 @@ end
 
 # Cookbook Settings
 default["percona"]["main_config_file"]                          = "/etc/my.cnf"
-default["percona"]["keyserver"]                                 = "keys.gnupg.com"
+default["percona"]["keyserver"]                                 = "keys.gnupg.net"
 default["percona"]["encrypted_data_bag"]                        = "passwords"
 
 # Start percona server on boot
