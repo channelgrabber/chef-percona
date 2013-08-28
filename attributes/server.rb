@@ -1,0 +1,1 @@
+default['percona']['server']['version'] = "5.5"
