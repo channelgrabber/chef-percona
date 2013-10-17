@@ -84,7 +84,7 @@ template "/etc/mysql/debian.cnf" do
   only_if { node["platform_family"] == "debian" }
 end
 
-Chef::Log.error "***************************************** MYSQL RESTART IS BELOW ME **********"
+Chef::Log.error "***************************************** MYSQL RESTART IS BELOW ME ********** :" + node["percona"]["auto_restart"]
 service "mysql" do
   action :restart
 end
