@@ -38,7 +38,7 @@ when "rhel"
 end
 
 # Cookbook Settings
-default["percona"]["main_config_file"]                          = "/etc/mysql/my.cnf"
+default["percona"]["main_config_file"]                          = "/etc/my.cnf"
 default["percona"]["keyserver"]                                 = "keyserver.ubuntu.com"
 default["percona"]["encrypted_data_bag"]                        = "passwords"
 
