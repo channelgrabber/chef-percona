@@ -83,3 +83,7 @@ template "/etc/mysql/debian.cnf" do
 
   only_if { node["platform_family"] == "debian" }
 end
+
+service "mysql" do
+  action :restart
+end
