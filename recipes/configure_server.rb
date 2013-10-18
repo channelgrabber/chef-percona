@@ -63,7 +63,7 @@ template percona["main_config_file"] do
   owner "root"
   group "root"
   mode 0744
-  notifies :restart, "service[mysql]"
+  notifies :restart, "service[mysql]", :delayed if !File.exists?(percona["main_config_file"])
 end
 
 # now let's set the root password only if this is the initial install
