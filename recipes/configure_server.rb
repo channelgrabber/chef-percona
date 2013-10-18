@@ -59,7 +59,6 @@ execute "setup mysql datadir" do
 end
 
 # setup the main server config file
-Chef::Log.error "*************************** " + File.exists?(restart_lock_file).inspect
 template percona["main_config_file"] do
   source "my.cnf.#{conf ? "custom" : server["role"]}.erb"
   owner "root"
@@ -94,7 +93,7 @@ ruby_block "inital_run_completed_flag" do
   action :nothing
 end
 
-# Setup restart lock, so the mysql server is not restarted
+# Setup restart lock, so the mysql server is not restarte
 file restart_lock_file do
   owner "root"
   group "root"
