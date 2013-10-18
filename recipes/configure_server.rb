@@ -85,14 +85,6 @@ template "/etc/mysql/debian.cnf" do
   only_if { node["platform_family"] == "debian" }
 end
 
-ruby_block "inital_run_completed_flag" do
-  block do
-    node.set['initial_run_completed'] = true
-    node.save
-  end
-  action :nothing
-end
-
 # Setup restart lock, so the mysql server is not restarte
 file restart_lock_file do
   owner "root"
