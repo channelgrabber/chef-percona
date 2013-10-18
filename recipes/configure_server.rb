@@ -2,6 +2,7 @@ percona = node["percona"]
 server  = percona["server"]
 conf    = percona["conf"]
 mysqld  = (conf && conf["mysqld"]) || {}
+restart_lock_file= node["percona"]["server"]["datadir"] + "restart.lock";
 
 # construct an encrypted passwords helper -- giving it the node and bag name
 passwords = EncryptedPasswords.new(node, percona["encrypted_data_bag"])
@@ -63,7 +64,7 @@ template percona["main_config_file"] do
   owner "root"
   group "root"
   mode 0744
-  notifies :restart, "service[mysql]", :delayed if !node.attribute?("initial_run_completed")
+  notifies :restart, "service[mysql]", :delayed if !File.exists?(restart_lock_file)
 end
 
 # now let's set the root password only if this is the initial install
@@ -79,7 +80,7 @@ template "/etc/mysql/debian.cnf" do
   owner "root"
   group "root"
   mode 0640
-  notifies :restart, "service[mysql]", :delayed if !node.attribute?("initial_run_completed")
+  notifies :restart, "service[mysql]", :delayed if !File.exists?(restart_lock_file)
 
   only_if { node["platform_family"] == "debian" }
 end
@@ -90,4 +91,12 @@ ruby_block "inital_run_completed_flag" do
     node.save
   end
   action :nothing
+end
+
+# Setup restart lock, so the mysql server is not restarted
+file node["percona"]["server"]["datadir"] + "restart.lock" do
+  owner "root"
+  group "root"
+  mode "0755"
+  action :create
 end
