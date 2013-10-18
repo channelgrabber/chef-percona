@@ -87,8 +87,8 @@ end
 
 # Setup restart lock, so the mysql server is not restarted
 file restart_lock_file do
-  owner "root"
-  group "root"
+  owner user
+  group user
   mode "0644"
   action :create
 end
