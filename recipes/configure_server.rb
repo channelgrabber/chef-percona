@@ -85,7 +85,7 @@ template "/etc/mysql/debian.cnf" do
   only_if { node["platform_family"] == "debian" }
 end
 
-# Setup restart lock, so the mysql server is not restarte
+# Setup restart lock, so the mysql server is not restarted
 file restart_lock_file do
   owner "root"
   group "root"
