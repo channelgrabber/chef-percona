@@ -63,7 +63,7 @@ template percona["main_config_file"] do
   owner "root"
   group "root"
   mode 0744
-  notifies :restart, "service[mysql]", :immediately if node["percona"]["auto_restart"]
+  notifies :restart, "service[mysql]", :immediately
 end
 
 # now let's set the root password only if this is the initial install
