@@ -2,6 +2,8 @@ percona = node["percona"]
 server  = percona["server"]
 conf    = percona["conf"]
 mysqld  = (conf && conf["mysqld"]) || {}
+datadir = mysqld["datadir"] || server["datadir"]
+user    = mysqld["username"] || server["username"]
 restart_lock_file = File.join(node["percona"]["server"]["datadir"], "restart.lock");
 
 # construct an encrypted passwords helper -- giving it the node and bag name
@@ -9,8 +11,8 @@ passwords = EncryptedPasswords.new(node, percona["encrypted_data_bag"])
 
 template "/root/.my.cnf" do
   variables(:root_password => passwords.root_password)
-  owner "root"
-  group "root"
+  owner user
+  group user
   mode 0600
   source "my.cnf.root.erb"
 end
@@ -28,9 +30,6 @@ if server["bind_to"]
   end
 end
 
-datadir = mysqld["datadir"] || server["datadir"]
-user    = mysqld["username"] || server["username"]
-
 # define the service
 service "mysql" do
   supports :restart => true
@@ -39,8 +38,8 @@ end
 
 # this is where we dump sql templates for replication, etc.
 directory "/etc/mysql" do
-  owner "root"
-  group "root"
+  owner user
+  group user
   mode 0755
 end
 
@@ -61,8 +60,8 @@ end
 # setup the main server config file
 template percona["main_config_file"] do
   source "my.cnf.#{conf ? "custom" : server["role"]}.erb"
-  owner "root"
-  group "root"
+  owner user
+  group user
   mode 0744
   notifies :restart, "service[mysql]", :delayed if !File.exists?(restart_lock_file)
 end
@@ -77,8 +76,8 @@ end
 template "/etc/mysql/debian.cnf" do
   source "debian.cnf.erb"
   variables(:debian_password => passwords.debian_password)
-  owner "root"
-  group "root"
+  owner user
+  group user
   mode 0640
   notifies :restart, "service[mysql]", :delayed if !File.exists?(restart_lock_file)
 
