@@ -63,7 +63,7 @@ template percona["main_config_file"] do
   owner "root"
   group "root"
   mode 0744
-  notifies :restart, "service[mysql]", :delayed if !File.exists?(percona["main_config_file"])
+  notifies :restart, "service[mysql]", :delayed if !node.attribute?("initial_run_completed")
 end
 
 # now let's set the root password only if this is the initial install
@@ -79,7 +79,15 @@ template "/etc/mysql/debian.cnf" do
   owner "root"
   group "root"
   mode 0640
-  notifies :restart, "service[mysql]", :delayed if !File.exists?(percona["main_config_file"])
+  notifies :restart, "service[mysql]", :delayed if !node.attribute?("initial_run_completed")
 
   only_if { node["platform_family"] == "debian" }
+end
+
+ruby_block "inital_run_completed_flag" do
+  block do
+    node.set['initial_run_completed'] = true
+    node.save
+  end
+  action :nothing
 end
