@@ -59,7 +59,7 @@ execute "setup mysql datadir" do
 end
 
 # setup the main server config file
-Chef::log.error "*************************** " + File.exists?(restart_lock_file).inspect
+Chef::Log.error "*************************** " + File.exists?(restart_lock_file).inspect
 template percona["main_config_file"] do
   source "my.cnf.#{conf ? "custom" : server["role"]}.erb"
   owner "root"
