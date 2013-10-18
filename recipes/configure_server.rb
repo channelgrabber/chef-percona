@@ -79,7 +79,7 @@ template "/etc/mysql/debian.cnf" do
   owner "root"
   group "root"
   mode 0640
-  notifies :restart, "service[mysql]", :immediately if node["percona"]["auto_restart"]
+  notifies :restart, "service[mysql]", :delayed if !File.exists?(percona["main_config_file"])
 
   only_if { node["platform_family"] == "debian" }
 end
