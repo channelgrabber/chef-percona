@@ -118,11 +118,15 @@ expire_logs_days = <%= node["percona"]["server"]["expire_logs_days"] %>
 max_binlog_size  = <%= node["percona"]["server"]["max_binlog_size"] %>
 #binlog_do_db   = include_database_name
 #binlog_ignore_db = include_database_name
+
 #
 # * InnoDB
 #
 # InnoDB is enabled by default with a 10MB datafile in /var/lib/mysql/.
 # Read the manual for more InnoDB related options. There are many!
+innodb_buffer_pool_size = <%= node["percona"]["server"]["innodb_buffer_pool_size"] %>
+
+
 #
 # * Security Features
 #
