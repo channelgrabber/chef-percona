@@ -69,6 +69,7 @@ default["percona"]["server"]["bind_address"]                    = "127.0.0.1"
 end
 
 # Fine Tuning
+default["percona"]["server"]['allow_reverse_dns']               = false
 default["percona"]["server"]["key_buffer"]                      = "16M"
 default["percona"]["server"]["max_allowed_packet"]              = "64M"
 default["percona"]["server"]["thread_stack"]                    = "192K"
