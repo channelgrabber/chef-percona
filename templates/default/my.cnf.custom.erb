@@ -8,5 +8,7 @@
 	  <%= "#{key} = #{node["percona"]["conf"][category][key]}" %>
 	<% end %>
 
-<% end %>
-skip-name-resolve
+<% end 
+if nodes["percona"]["server"]["allow_reverse_dns"] %>
+	skip-name-resolve <% 
+end %>
