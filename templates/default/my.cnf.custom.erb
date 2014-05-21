@@ -9,6 +9,6 @@
 	<% end %>
 
 <% end 
-if nodes["percona"]["server"]["allow_reverse_dns"] %>
+if node["percona"]["server"]["allow_reverse_dns"] %>
 	skip-name-resolve <% 
 end %>
