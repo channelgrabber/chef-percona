@@ -2,10 +2,12 @@
 #
 # The MySQL database server configuration file.
 <% node["percona"]["conf"].keys.each do |category| %>
+
 <%= "[#{category}]" %>
 <% node["percona"]["conf"][category].keys.each do |key| %>
   <%= "#{key} = #{node["percona"]["conf"][category][key]}" %>
 <% end %>
+
 <% end 
 if !node["percona"]["server"]["allow_reverse_dns"] %>
 	skip-name-resolve <% 
