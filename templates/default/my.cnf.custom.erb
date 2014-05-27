@@ -14,5 +14,5 @@ puts "~~~~~~~~~~~~~~~~~~~"
 puts node["percona"]["options"].inspect %>
 <% node["percona"]["options"][category].each do |option| %>
 	<%= option %>
-<% end unless !(node["percona"]["options"].has_key?(category) %>
+<% end unless !(node["percona"]["options"].has_key?(category)) %>
 <% end %>
