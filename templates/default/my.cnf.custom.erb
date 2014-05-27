@@ -7,11 +7,6 @@
 <% node["percona"]["conf"][category].keys.each do |key| %>
     <%= "#{key} = #{node["percona"]["conf"][category][key]}" %>
 <% end %>
-
-<% puts "%%%%%%%%%%%%%%%%%%%"
-puts category
-puts "~~~~~~~~~~~~~~~~~~~"
-puts node["percona"]["options"].inspect %>
 <% node["percona"]["options"][category].each do |option| %>
 	<%= option %>
 <% end unless !(node["percona"]["options"].has_key?(category)) %>
