@@ -157,7 +157,7 @@ default["percona"]["cluster"]["innodb_autoinc_lock_mode"]       = 2
 
 #list of options given 
 default["percona"]["options"] = {
-  'server' => [
+  'mysqld' => [
     'skip-name-resolve'
   ]
 }
