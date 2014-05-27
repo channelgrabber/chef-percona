@@ -69,7 +69,6 @@ default["percona"]["server"]["bind_address"]                    = "127.0.0.1"
 end
 
 # Fine Tuning
-default["percona"]["server"]["allow_reverse_dns"]               = false
 default["percona"]["server"]["key_buffer"]                      = "16M"
 default["percona"]["server"]["max_allowed_packet"]              = "64M"
 default["percona"]["server"]["thread_stack"]                    = "192K"
@@ -155,4 +154,11 @@ default["percona"]["cluster"]["wsrep_sst_method"]               = "rsync"
 default["percona"]["cluster"]["wsrep_node_name"]                = ""
 default["percona"]["cluster"]["innodb_locks_unsafe_for_binlog"] = 1
 default["percona"]["cluster"]["innodb_autoinc_lock_mode"]       = 2
+
+#list of options given 
+default["percona"]["options"] = {
+  'server' => [
+    'skip-name-resolve'
+  ]
+}
 
