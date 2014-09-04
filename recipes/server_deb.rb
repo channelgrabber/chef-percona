@@ -20,9 +20,9 @@ end
         "/Percona-Server-#{version}" +
         "/binary" +
         "/#{node['platform_family']}" +
-        "/#{node['codename']}" +
+        "/#{node['lsb']['codename']}" +
         "/x86_64" +
-        "/percona-server-server-#{serverVersion}_#{versionBuild}.#{node['codename']}_amd64.deb"
+        "/percona-server-server-#{serverVersion}_#{versionBuild}.#{node['lsb']['codename']}_amd64.deb"
 
     remote_file deb do
         source source
