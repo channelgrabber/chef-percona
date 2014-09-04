@@ -11,7 +11,7 @@ directory deb_path do
     action :create
 end
 
-%w{percona-server-common percona-server-client percona-server-server}.each do |package|
+%w{percona-server-common percona-server-server}.each do |package|
     deb = File.join(deb_path, "#{package}.deb")
     source =
         "http://www.percona.com" +
