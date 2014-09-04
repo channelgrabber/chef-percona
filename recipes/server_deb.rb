@@ -5,7 +5,12 @@ versionBuild = node['percona']['server_deb']['version']
 version = versionBuild.rpartition('-').first
 tmp = node['percona']['server_deb']['tmp']
 
-directory tmp
+directory tmp do
+    recursive true
+    action :create
+end
+
+
 %w{percona-server-common percona-server-client percona-server-server}.each do |package|
     deb = File.join(tmp, "#{package}-#{serverVersion}_#{versionBuild}.deb")
     source =
