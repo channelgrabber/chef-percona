@@ -32,6 +32,7 @@ end
 
 dpkg_package "percona-server-server-#{serverVersion}" do
     source deb_path
+    version "#{versionBuild}.#{node['lsb']['codename']}"
     options "--recursive"
     action :install
 end
