@@ -29,7 +29,7 @@ end
         action :create_if_missing
     end
 
-    apt_package "#{package}-#{serverVersion}" do
+    package "#{package}-#{serverVersion}" do
         source deb
         version "#{versionBuild}.#{node['lsb']['codename']}"
         options "--force-yes"
