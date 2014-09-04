@@ -41,10 +41,7 @@ dpkg_package "percona-server-server-#{serverVersion}" do
     action :install
 end
 
-apt_package "percona-server-server-#{serverVersion}" do
-    package_name ""
-    action :install
-end
+execute "apt-get install -f"
 
 include_recipe "percona::configure_server"
 
