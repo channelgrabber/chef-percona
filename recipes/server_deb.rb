@@ -4,15 +4,15 @@ serverVersion = node['percona']['server']['version']
 versionBuild = node['percona']['server_deb']['version']
 version = versionBuild.rpartition('-').first
 tmp = node['percona']['server_deb']['tmp']
+deb_path = File.join(tmp, version, versionBuild)
 
-directory tmp do
+directory path do
     recursive true
     action :create
 end
 
-
 %w{percona-server-common percona-server-client percona-server-server}.each do |package|
-    deb = File.join(tmp, "#{package}-#{serverVersion}_#{versionBuild}.deb")
+    deb = File.join(deb_path, "#{package}.deb")
     source =
         "http://www.percona.com" +
         "/downloads" +
@@ -36,6 +36,11 @@ end
     end
 end
 
+dpkg_package "percona-server-#{serverVersion}" doe
+    source deb_path
+    options "--recursive"
+    action :install
+end
 
 include_recipe "percona::configure_server"
 
