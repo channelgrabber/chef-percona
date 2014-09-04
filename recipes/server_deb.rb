@@ -28,12 +28,6 @@ end
         source source
         action :create_if_missing
     end
-
-    dpkg_package "#{package}-#{serverVersion}" do
-        source deb
-        version "#{versionBuild}.#{node['lsb']['codename']}"
-        action :install
-    end
 end
 
 dpkg_package "percona-server-#{serverVersion}" doe
