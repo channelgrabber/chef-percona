@@ -15,9 +15,9 @@ directory tmp
         "/Percona-Server-#{version}" +
         "/binary" +
         "/#{node['platform_family']}" +
-        "/#{node['platform']}" +
+        "/#{node['platform_version']}" +
         "/x86_64" +
-        "/percona-server-server-#{serverVersion}_#{versionBuild}.#{node['platform']}_amd64.deb"
+        "/percona-server-server-#{serverVersion}_#{versionBuild}.#{node['platform_version']}_amd64.deb"
 
     remote_file deb do
         source source
