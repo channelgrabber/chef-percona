@@ -26,6 +26,7 @@ directory tmp
 
     apt_package "#{package}-#{serverVersion}" do
         source deb
+        options "--force-yes"
         action :install
     end
 end
