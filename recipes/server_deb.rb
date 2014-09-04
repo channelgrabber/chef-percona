@@ -30,7 +30,7 @@ end
     end
 end
 
-dpkg_package "percona-server-#{serverVersion}" do
+dpkg_package "percona-server-server-#{serverVersion}" do
     source deb_path
     options "--recursive"
     action :install
