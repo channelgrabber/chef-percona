@@ -4,9 +4,9 @@ serverVersion = node['percona']['server']['version']
 versionBuild = node['percona']['server_deb']['version']
 version = versionBuild.rpartition('-').first
 tmp = node['percona']['server_deb']['tmp']
-deb_path = File.join(tmp, version, versionBuild)
+deb_path = File.join(tmp, "#{serverVersion}_#{versionBuild}.#{node['lsb']['codename']}_amd64")
 
-directory path do
+directory deb_path do
     recursive true
     action :create
 end
