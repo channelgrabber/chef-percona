@@ -26,7 +26,6 @@ directory tmp
 
     apt_package "#{package}-#{serverVersion}" do
         source deb
-        version versionBuild
         action :install
     end
 end
