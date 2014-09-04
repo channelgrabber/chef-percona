@@ -31,6 +31,7 @@ end
 
     apt_package "#{package}-#{serverVersion}" do
         source deb
+        version "#{versionBuild}.#{node['lsb']['codename']}"
         options "--force-yes"
         action :install
     end
