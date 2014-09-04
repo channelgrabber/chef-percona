@@ -29,10 +29,9 @@ end
         action :create_if_missing
     end
 
-    package "#{package}-#{serverVersion}" do
+    dpkg_package "#{package}-#{serverVersion}" do
         source deb
         version "#{versionBuild}.#{node['lsb']['codename']}"
-        options "--force-yes"
         action :install
     end
 end
