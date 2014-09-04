@@ -30,10 +30,14 @@ end
     end
 end
 
+%w{libdbd-mysql-perl libaio1}.each do |dependency|
+    package dependency
+end
+
 dpkg_package "percona-server-server-#{serverVersion}" do
     source deb_path
     version "#{versionBuild}.#{node['lsb']['codename']}"
-    options "--recursive --force-depends"
+    options "--recursive --force-depends --force-configure-any"
     action :install
 end
 
