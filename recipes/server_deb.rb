@@ -5,7 +5,6 @@ versionBuild = node['percona']['server_deb']['version']
 version = versionBuild.rpartition('-').first
 tmp = node['percona']['server_deb']['tmp']
 deb_path = File.join(tmp, "#{serverVersion}_#{versionBuild}.#{node['lsb']['codename']}_amd64")
-version_path = File.join(tmp, "version")
 
 directory deb_path do
     recursive true
@@ -35,16 +34,12 @@ end
     package dependency
 end
 
-execute "percona --version" do
-    command "dpkg -l | grep '^ii' | grep percona-server-server | awk '{print $3}' 1>#{version_path} 2>/dev/null"
-    action :run
-end
-
+installedVersion = "dpkg -l | grep '^ii' | grep percona-server-server-#{serverVersion} | awk '{print $3}'"
 dpkg_package "percona-server-server-#{serverVersion}" do
     source deb_path
     version "#{versionBuild}.#{node['lsb']['codename']}"
     options "--recursive --force-depends --force-configure-any"
-    not_if "dpkg --compare-versions #{versionBuild}.#{node['lsb']['codename']} '=' $(cat #{version_path})"
+    not_if "dpkg --compare-versions #{versionBuild}.#{node['lsb']['codename']} '=' $(#{installedVersion})"
     action :install
 end
 
