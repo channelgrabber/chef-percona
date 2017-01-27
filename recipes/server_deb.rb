@@ -1,5 +1,13 @@
 # Install exact version of percona by downloading deb packages
 
+versionCheck =
+  "dpkg --compare-versions" +
+  " '#{node['percona']['server_deb']['version']}.#{node['lsb']['codename']}'" +
+  " '='" +
+  " `dpkg -l | grep '^ii' | grep percona-server-server-#{node['percona']['server']['version']} | awk '{print $3}'`"
+
+return if system(versionCheck)
+
 serverVersion = node['percona']['server']['version']
 versionBuild = node['percona']['server_deb']['version']
 version = versionBuild.rpartition('-').first
@@ -9,6 +17,10 @@ deb_path = File.join(tmp, "#{serverVersion}_#{versionBuild}.#{node['lsb']['coden
 directory deb_path do
     recursive true
     action :create
+end
+
+%w{libdbd-mysql-perl libaio1}.each do |dependency|
+    package dependency
 end
 
 %w{percona-server-common percona-server-server}.each do |package|
@@ -28,24 +40,12 @@ end
         source source
         action :create_if_missing
     end
+
+    dpkg_package "#{package}-#{serverVersion}" do
+      source deb
+      action :install
+    end
 end
-
-%w{libdbd-mysql-perl libaio1}.each do |dependency|
-    package dependency
-end
-
-installedVersion = "dpkg -l | grep '^ii' | grep percona-server-server-#{serverVersion} | awk '{print $3}'"
-dpkg_package "percona-server-server-#{serverVersion}" do
-    source deb_path
-    version "#{versionBuild}.#{node['lsb']['codename']}"
-    options "--recursive --force-depends --force-configure-any"
-    not_if "dpkg --compare-versions #{versionBuild}.#{node['lsb']['codename']} '=' $(#{installedVersion})"
-    action :install
-end
-
-execute "apt-get install -f -y --force-yes"
-
-include_recipe "percona::configure_server"
 
 # access grants
 include_recipe "percona::access_grants"
