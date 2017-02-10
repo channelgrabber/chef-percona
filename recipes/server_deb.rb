@@ -6,24 +6,23 @@ versionCheck =
   " '='" +
   " `dpkg -l | grep '^ii' | grep percona-server-server-#{node['percona']['server']['version']} | awk '{print $3}'`"
 
-return if system(versionCheck)
+if !system(versionCheck)
+  serverVersion = node['percona']['server']['version']
+  versionBuild = node['percona']['server_deb']['version']
+  version = versionBuild.rpartition('-').first
+  tmp = node['percona']['server_deb']['tmp']
+  deb_path = File.join(tmp, "#{serverVersion}_#{versionBuild}.#{node['lsb']['codename']}_amd64")
 
-serverVersion = node['percona']['server']['version']
-versionBuild = node['percona']['server_deb']['version']
-version = versionBuild.rpartition('-').first
-tmp = node['percona']['server_deb']['tmp']
-deb_path = File.join(tmp, "#{serverVersion}_#{versionBuild}.#{node['lsb']['codename']}_amd64")
-
-directory deb_path do
+  directory deb_path do
     recursive true
     action :create
-end
+  end
 
-%w{libdbd-mysql-perl libaio1}.each do |dependency|
+  %w{libdbd-mysql-perl libaio1}.each do |dependency|
     package dependency
-end
+  end
 
-%w{percona-server-common percona-server-server}.each do |package|
+  %w{percona-server-common percona-server-server}.each do |package|
     deb = File.join(deb_path, "#{package}.deb")
     source =
         "http://www.percona.com" +
@@ -37,15 +36,18 @@ end
         "/#{package}-#{serverVersion}_#{versionBuild}.#{node['lsb']['codename']}_amd64.deb"
 
     remote_file deb do
-        source source
-        action :create_if_missing
+      source source
+      action :create_if_missing
     end
 
     dpkg_package "#{package}-#{serverVersion}" do
       source deb
       action :install
     end
+  end
 end
+
+include_recipe "percona::configure_server"
 
 # access grants
 include_recipe "percona::access_grants"
