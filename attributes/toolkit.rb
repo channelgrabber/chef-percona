@@ -1,1 +1,1 @@
-default["percona"]["toolkit"]["version"] = "3.0.13"
+default["percona"]["toolkit"]["version"] = "3.0.13-1.trusty"
