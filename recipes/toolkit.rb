@@ -9,4 +9,5 @@ end
 
 package "percona-toolkit" do
   options "--force-yes" if platform_family?('debian')
+  version node["percona"]["toolkit"]["version"]
 end
