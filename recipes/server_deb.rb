@@ -3,18 +3,25 @@
 serverVersion = node['percona']['server']['version']
 versionBuild = node['percona']['server_deb']['version']
 version = versionBuild.rpartition('-').first
-tmp = node['percona']['server_deb']['tmp']
-deb_path = File.join(tmp, "#{serverVersion}_#{versionBuild}.#{node['lsb']['codename']}_amd64")
 
-directory deb_path do
+currentVersion = `dpkg -l | grep '^ii' | grep percona-server-server | awk '{print $3}'`.strip
+unless currentVersion.empty? || Gem::Dependency.new('percona', "~>#{serverVersion}.0").match?('percona', currentVersion.partition("-").first)
+  Chef::Application.fatal!("Unable to migrate percona-server-server (#{currentVersion}) to #{serverVersion}")
+end
+
+tmp = node['percona']['server_deb']['tmp']
+debPath = File.join(tmp, "#{serverVersion}_#{versionBuild}.#{node['lsb']['codename']}_amd64")
+packages = %w{percona-server-common percona-server-client percona-server-server}
+
+directory debPath do
     recursive true
     action :create
 end
 
-%w{percona-server-common percona-server-server}.each do |package|
-    deb = File.join(deb_path, "#{package}.deb")
+packages.each do |package|
+    deb = File.join(debPath, "#{package}.deb")
     source =
-        "http://www.percona.com" +
+        "https://www.percona.com" +
         "/downloads" +
         "/Percona-Server-#{serverVersion}" +
         "/Percona-Server-#{version}" +
@@ -30,20 +37,20 @@ end
     end
 end
 
-%w{libdbd-mysql-perl libaio1}.each do |dependency|
+%w{libmecab2 libjemalloc1 zlib1g-dev libaio1}.each do |dependency|
     package dependency
 end
 
-installedVersion = "dpkg -l | grep '^ii' | grep percona-server-server-#{serverVersion} | awk '{print $3}'"
-dpkg_package "percona-server-server-#{serverVersion}" do
-    source deb_path
-    version "#{versionBuild}.#{node['lsb']['codename']}"
-    options "--recursive --force-depends --force-configure-any"
-    not_if "dpkg --compare-versions #{versionBuild}.#{node['lsb']['codename']} '=' $(#{installedVersion})"
-    action :install
+unless Gem::Dependency.new('percona', version).match?('percona', (currentVersion.empty? ? versionBuild : currentVersion).partition("-").first)
+  packages.each do |package|
+    dpkg_package "#{package}-#{serverVersion}" do
+        source File.join(debPath, "#{package}.deb")
+        version "#{versionBuild}.#{node['lsb']['codename']}"
+        options "--force-configure-any"
+        action :install
+    end
+  end
 end
-
-execute "apt-get install -f -y --force-yes"
 
 include_recipe "percona::configure_server"
 
